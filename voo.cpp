@@ -69,4 +69,58 @@ void listarVoos() {
 
     Voo voo;
     cout << "\n=== Lista de Voos ===\n";
-    while (file.read(reinterpret_cast<char*>(&voo), sizeof(Voo)))
+    while (file.read(reinterpret_cast<char*>(&voo), sizeof(Voo))) {
+        cout << "Código do Voo: " << voo.codigo << endl;
+        cout << "Data: " << voo.data << endl;
+        cout << "Hora: " << voo.hora << endl;
+        cout << "Origem: " << voo.origem << endl;
+        cout << "Destino: " << voo.destino << endl;
+        cout << "Código do Avião: " << voo.codigoAviao << endl;
+        cout << "Tripulação: ";
+        for (const int& t : voo.tripulacao) {
+            cout << t << " ";
+        }
+        cout << "\nTarifa: R$ " << voo.tarifa << endl;
+        cout << "Status: " << (voo.ativo ? "Ativo" : "Inativo") << endl;
+        cout << "---------------------------" << endl;
+    }
+    file.close();
+}
+
+// Função para atualizar o status de um voo
+void atualizarStatusVoo() {
+    fstream file("voos.dat", ios::binary | ios::in | ios::out); // Abre arquivo para leitura e escrita
+    if (!file) {
+        cerr << "Erro ao abrir arquivo!" << endl;
+        return;
+    }
+
+    int codigo;
+    cout << "Digite o código do voo para atualizar o status: ";
+    cin >> codigo;
+
+    Voo voo;
+    bool encontrado = false;
+
+    while (file.read(reinterpret_cast<char*>(&voo), sizeof(Voo))) {
+        if (voo.codigo == codigo) {
+            if (voo.tripulacao.size() >= 2) {
+                voo.ativo = true;
+            } else {
+                voo.ativo = false;
+                cout << "A tripulação é insuficiente. O voo será marcado como inativo." << endl;
+            }
+
+            file.seekp(-sizeof(Voo), ios::cur); // Volta o ponteiro para sobrescrever
+            file.write(reinterpret_cast<char*>(&voo), sizeof(Voo));
+            encontrado = true;
+            cout << "Status do voo atualizado com sucesso!" << endl;
+            break;
+        }
+    }
+
+    if (!encontrado) {
+        cout << "Voo não encontrado." << endl;
+    }
+    file.close();
+}
