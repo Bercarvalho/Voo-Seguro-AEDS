@@ -1,14 +1,16 @@
+
 #ifndef PASSAGEIRO_H
 #define PASSAGEIRO_H
 
 #include <string>
 
+using namespace std;
 // Estrutura para representar um passageiro
 struct Passageiro {
     int codigo;            // Código único do passageiro
-    std::string nome;      // Nome do passageiro
-    std::string endereco;  // Endereço do passageiro
-    std::string telefone;  // Telefone do passageiro
+    string nome;      // Nome do passageiro
+    string endereco;  // Endereço do passageiro
+    string telefone;  // Telefone do passageiro
     bool fidelidade;       // Indica se o passageiro está no programa de fidelidade
     int pontosFidelidade;  // Pontos acumulados de fidelidade
 };
